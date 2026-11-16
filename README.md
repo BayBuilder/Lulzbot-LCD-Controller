@@ -9,6 +9,11 @@ The Lulzbot Mini has a [MiniRambo](https://reprap.org/wiki/MiniRambo) control bo
 The MiniRambo uses an Atmega32u2 as a USB to serial bridge between an external computer and an Atmega256 that performs the actual printing. The serial data between the two Atmega micros runs through an ADuM7441 digital isolator. There are header pins for programming both Atmega microcontrollers that provide easy access to power, ground, and RESET.
 
 ## Modding the MiniRambo
-The CYD cannot natively act as a USB host (there are software workarounds), so I decided to tap into the serial communications that run between the two Atmega micros. Test points on the back of the MiniRambo provide easy access to the TX, RX, and DTR signals.
+The simplest way to interface the CYD to the Lulzbot Mini would be to configure the CYD as a USB host and connect it to the Mini's USB port. Unfortunately, the CYD hardware does not support USB host mode. Alternatively, the Atmega32u2 can be disabled and the CYD can communicate directly with the Atmega256. 
 
-Because the CYD runs at 3.3v and the MiniRambo at 5V, level shifting of digital signals is required. Fortunately, the Atmega32u2 is powered from the USB connection, and the ADuM7441 isolator can also perform level shifting.
+The Atmega32u2 is designed to be powered by the USB cable from the connected computer and is isolated from the rest of the MiniRambo electronics by the ADuM7441. Because of this, keeping the Atmega32u2 in RESET will allow the CYD to "borrow" its serial connections to the Atmega256. Conveniently, the ADuM7441 will also convert the 3.3v logic levels of the CYD to the MiniRambo's 5v logic levels. The only concern is that this will power the Atmega32u2 with 3.3v instead of 5v. The Atmega32u2 is designed to run with a 3.3v supply (at lower clock frequencies), so this is a non-issue.
+
+
+
+
+
