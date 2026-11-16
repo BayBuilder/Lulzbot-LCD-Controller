@@ -14,7 +14,7 @@ The [Lulzbot Mini](https://lulzbot.com/legacy-printers/lulzbot-mini) utilizes a 
 The MiniRambo uses an [Atmega32u2](https://www.microchip.com/en-us/product/ATmega32U2) as a USB to serial bridge between a PC and an [Atmega2560](https://www.microchip.com/en-us/product/ATmega2560) that performs the actual printing. The serial data between the two Atmega micros runs through an [ADuM7441](https://www.analog.com/en/products/ad7741.html) digital isolator. Header pins for in-circuit programming provide easy access to power, ground, and RESET signals.
 
 ## Modding the MiniRambo
-The CYD cannot interface directly to the printer's USB-B port as it does not support being a USB host. Connecting directly to the Atmega2560's second serial port (using the unpopulated GPIO headers) would require 3.3v/5v logic level shifters. Instead, the Atmega32u2 is disabled so the CYD can communicate directly with the Atmega2560 on its primary serial port. 
+The CYD cannot interface directly to the printer's USB-B port as it does not support USB host mode. Connecting directly to the Atmega2560's second serial port (using the unpopulated GPIO headers) would require 3.3v/5v logic level shifters. Instead, the Atmega32u2 is disabled so the CYD can communicate directly with the Atmega2560 on its primary serial port. 
 
 The Atmega32u2 is designed to be powered by the USB cable from PC and is isolated from the rest of the MiniRambo electronics by an ADuM7441, which can also act as a 3.3v/5v logic level shifter. By keeping the Atmega32u2 in RESET, the CYD can "share" the serial connection to the Atmega2560.
 
