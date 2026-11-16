@@ -1,12 +1,17 @@
 # Lulzbot-LCD-Controller
  LCD controller for Lulzbot Mini v1.0
 
-This is an LCD controller built from a Cheap Yellow Display (CYD) ESP32-2432S028R. It is used to control a Lulzbot Mini v1.0 3D printer. Without this controller, the Mini v1.0 must be tethered to a PC or laptop in order to print. This controller reads G-code files from an SD card and controls the printer directly, no tethered PC needed!
+An LCD controller to make 3D prints with a Lulzbot Mini V1.0 without a tethered PC. The controller reads G-code files from an SD card and controls the printer directly.
+
+Built using a [Cheap Yellow Display](https://www.espboards.dev/esp32/cyd-esp32-2432s028/) (CYD) ESP32-2432S028R, version 3.  
+[LVGL](https://github.com/lvgl/lvgl) graphics library for the UI.  
+[LovyanGFX](https://github.com/lovyan03/LovyanGFX) for the low-level display driver.  
+[SdFat](https://github.com/greiman/SdFat) to read the SD card.  
 
 ## Lulzbot Hardware
-The Lulzbot Mini has a [MiniRambo](https://reprap.org/wiki/MiniRambo) control board that runs Marlin firmware. Some MiniRambo boards include 2x5 pin headers compatible with RepRapDiscount LCD controllers. The older versions have finer pitch GPIO ports that were left off the board during manufacturing, making it difficult to add an LCD panel.
+The [Lulzbot Mini](https://lulzbot.com/legacy-printers/lulzbot-mini) utilizes a [MiniRambo](https://reprap.org/wiki/MiniRambo) control board running [Marlin](https://marlinfw.org/) firmware. Some MiniRambo boards include 2x5 pin headers compatible with [RepRapDiscount LCD controllers](https://reprap.org/wiki/RepRapDiscount_Smart_Controller). Older versions have finer pitch GPIO ports that were left off the board during manufacturing, making it difficult to add an LCD panel.
 
-The MiniRambo uses an Atmega32u2 as a USB to serial bridge between an external computer and an Atmega256 that performs the actual printing. The serial data between the two Atmega micros runs through an ADuM7441 digital isolator. There are header pins for programming both Atmega microcontrollers that provide easy access to power, ground, and RESET.
+The MiniRambo uses an [Atmega32u2](https://www.microchip.com/en-us/product/ATmega32U2) as a USB to serial bridge between an PC and an [Atmega2560](https://www.microchip.com/en-us/product/ATmega2560) that performs the actual printing. The serial data between the two Atmega micros runs through an [ADuM7441](https://www.analog.com/en/products/ad7741.html) digital isolator. Header pins for in-circuit programming provide easy access to power, ground, and RESET signals.
 
 ## Modding the MiniRambo
 The simplest way to interface the CYD to the Lulzbot Mini would be to configure the CYD as a USB host and connect it to the Mini's USB port. Unfortunately, the CYD hardware does not support USB host mode. Alternatively, the Atmega32u2 can be disabled and the CYD can communicate directly with the Atmega256. 
