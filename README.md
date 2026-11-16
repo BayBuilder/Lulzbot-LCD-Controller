@@ -22,12 +22,12 @@ The downside to the shared serial connection is that connecting a PC to the Lulz
 
 | MiniRambo | | CYD |
 |---|---|---|
-| TX Testpoint | -> | CYD TX |
-| RX Testpoint | -> | CYD RX |
-| DTR Testpoint | -> | CYD DTR |
-| USB VCC | -> | CYD 3.3v |
-| GND1 | -> | CYD GND |
-| RESET | -> | CYD GND|
+| TX Testpoint | -> | CYD RX |
+| RX Testpoint | <- | CYD TX |
+| DTR Testpoint | <- | CYD DTR |
+| USB VCC | <- | CYD 3.3v |
+| GND1 | <-> | CYD GND |
+| RESET | <- | CYD GND|
 
 ## Undoing the Mods
 If a tethered connection to a PC is needed in the future, the CYD can be unplugged and the Mini will revert to its "stock" configuration.
