@@ -11,12 +11,14 @@ Built using a [Cheap Yellow Display](https://www.espboards.dev/esp32/cyd-esp32-2
 ## Lulzbot Hardware
 The [Lulzbot Mini](https://lulzbot.com/legacy-printers/lulzbot-mini) utilizes a [MiniRambo](https://reprap.org/wiki/MiniRambo) control board running [Marlin](https://marlinfw.org/) firmware. Some MiniRambo boards include 2x5 pin headers compatible with [RepRapDiscount LCD controllers](https://reprap.org/wiki/RepRapDiscount_Smart_Controller). Older versions have finer pitch GPIO ports that were left off the board during manufacturing, making it difficult to add an LCD panel.
 
-The MiniRambo uses an [Atmega32u2](https://www.microchip.com/en-us/product/ATmega32U2) as a USB to serial bridge between an PC and an [Atmega2560](https://www.microchip.com/en-us/product/ATmega2560) that performs the actual printing. The serial data between the two Atmega micros runs through an [ADuM7441](https://www.analog.com/en/products/ad7741.html) digital isolator. Header pins for in-circuit programming provide easy access to power, ground, and RESET signals.
+The MiniRambo uses an [Atmega32u2](https://www.microchip.com/en-us/product/ATmega32U2) as a USB to serial bridge between a PC and an [Atmega2560](https://www.microchip.com/en-us/product/ATmega2560) that performs the actual printing. The serial data between the two Atmega micros runs through an [ADuM7441](https://www.analog.com/en/products/ad7741.html) digital isolator. Header pins for in-circuit programming provide easy access to power, ground, and RESET signals.
 
 ## Modding the MiniRambo
-The simplest way to interface the CYD to the Lulzbot Mini would be to configure the CYD as a USB host and connect it to the Mini's USB port. Unfortunately, the CYD hardware does not support USB host mode. Alternatively, the Atmega32u2 can be disabled and the CYD can communicate directly with the Atmega256. 
+The CYD cannot interface directly to the printer's USB-B port as it does not support being a USB host. Connecting directly to the Atmega2560's second serial port (using the unpopulated GPIO headers) would require 3.3v/5v logic level shifters. Instead, the Atmega32u2 is disabled so the CYD can communicate directly with the Atmega2560 on its primary serial port. 
 
-The Atmega32u2 is designed to be powered by the USB cable from the connected computer and is isolated from the rest of the MiniRambo electronics by the ADuM7441. Because of this, keeping the Atmega32u2 in RESET will allow the CYD to "borrow" its serial connections to the Atmega256. Conveniently, the ADuM7441 will also convert the 3.3v logic levels of the CYD to the MiniRambo's 5v logic levels. The only concern is that this will power the Atmega32u2 with 3.3v instead of 5v. The Atmega32u2 is designed to run with a 3.3v supply (at lower clock frequencies), so this is a non-issue.
+The Atmega32u2 is designed to be powered by the USB cable from PC and is isolated from the rest of the MiniRambo electronics by an ADuM7441, which can also act as a 3.3v/5v logic level shifter. By keeping the Atmega32u2 in RESET, the CYD can "share" the serial connection to the Atmega2560.
+
+The downside to the shared serial connection is that connecting a PC to the Lulzbot Mini while the CYD is connected will connect the PC's USB power (5v) to the CYD's 3.3v power pins. This danger can be eliminated by physically blocking the Mini's USB port while the CYD is connected.
 
 | MiniRambo | | CYD |
 |---|---|---|
@@ -27,11 +29,8 @@ The Atmega32u2 is designed to be powered by the USB cable from the connected com
 | GND1 | -> | CYD GND |
 | RESET | -> | CYD GND|
 
-The only "gotcha" is that connecting the MiniRambo to a computer via USB while the CYD is connected will fry the CYD.
-
-## All The Rest
-With the hardware connections made, the CYD can control the Atmega256 directly. G-code files stored on an SD card can be read and used to make 3D prints without a tethered computer.
-
+## Undoing the Mods
+If a tethered connection to a PC is needed in the future, the CYD can be unplugged and the Mini will revert to its "stock" configuration.
 
 
 
